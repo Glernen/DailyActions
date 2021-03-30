@@ -30,6 +30,6 @@ jobs:
           npm install got #tough-cookie
       - name: ' 运行 【2345签到】'
         run: |
-          node jf2345.js
+          node wplm.js
         env:
           PUSH_PLUS_TOKEN: ${{ secrets.PUSH_PLUS_TOKEN }}
