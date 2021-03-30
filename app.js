@@ -22,6 +22,7 @@ async function downFile () {
 async function changeFiele () {
    let content = await fs.readFileSync('./jf2345.js', 'utf8')
    content = content.replace(/var cookie = ''/, `var cookie = '${cookie}'`)
+   console.log(`${cookie}`)
    await fs.writeFileSync( './jf2345.js', content, 'utf8')
 }
 
