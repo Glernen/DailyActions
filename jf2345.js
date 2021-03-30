@@ -72,6 +72,7 @@ if ($.isNode()) {
             await ProfitReport();
             await entry();
             await showMsg();
+            $.msg = '你好'
         }
       }
     if ($.isNode() && message) {
