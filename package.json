@@ -2,6 +2,9 @@
 	"name":"jf2345",
 	"version":"1.0.0",
 	"author":"h455257166",
+	"description":"",
+	"main": "Task/jf2345.js",
+	"license": "ISC",
 	"devDependencies":{
 		"form-data":"^3.0.0",
 		"node-fetch":"^2.6.1"
