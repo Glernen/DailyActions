@@ -8,19 +8,21 @@ const rp = require('request-promise')
 const download = require('download')
 
 // 公共变量
-const KEY = process.env.JD_COOKIE
-const serverJ = process.env.PUSH_KEY
+const cookie = process.env.JD_COOKIE
+const PUSH_PLUS_TOKEN = process.env.PUSH_PLUS_TOKEN
 
 async function downFile () {
     // const url = 'https://cdn.jsdelivr.net/gh/NobyDa/Script@master/JD-DailyBonus/JD_DailyBonus.js'
-    const url = 'https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js'
-    await download(url, './')
+    const jsUrl = 'https://raw.githubusercontent.com/h455257166/My_Script/JSActionsScripts/jf2345.js'
+    const tzUrl = 'https://raw.githubusercontent.com/h455257166/DailyActions/main/sendNotify.js'
+    await download(jsUrl, './')
+    await download(tzUrl, './')
 }
 
 async function changeFiele () {
-   let content = await fs.readFileSync('./JD_DailyBonus.js', 'utf8')
-   content = content.replace(/var Key = ''/, `var Key = '${KEY}'`)
-   await fs.writeFileSync( './JD_DailyBonus.js', content, 'utf8')
+   let content = await fs.readFileSync('./jf2345.js', 'utf8')
+   content = content.replace(/var cookie = ''/, `var cookie = '${cookie}'`)
+   await fs.writeFileSync( './jf2345.js', content, 'utf8')
 }
 
 async function sendNotify (text,desp) {
@@ -40,8 +42,8 @@ async function sendNotify (text,desp) {
 }
 
 async function start() {
-  if (!KEY) {
-    console.log('请填写 key 后在继续')
+  if (!cookie) {
+    console.log('请填写 cookie 后在继续')
     return
   }
   // 下载最新代码
@@ -51,18 +53,18 @@ async function start() {
   await changeFiele();
   console.log('替换变量完毕')
   // 执行
-  await exec("node JD_DailyBonus.js >> result.txt");
+  await exec("node jf2345.js >> result.txt");
   console.log('执行完毕')
 
-  if (serverJ) {
-    const path = "./result.txt";
-    let content = "";
-    if (fs.existsSync(path)) {
-      content = fs.readFileSync(path, "utf8");
-    }
-    await sendNotify("京东签到-" + new Date().toLocaleDateString(), content);
-    console.log('发送结果完毕')
-  }
+  // if (serverJ) {
+  //   const path = "./result.txt";
+  //   let content = "";
+  //   if (fs.existsSync(path)) {
+  //     content = fs.readFileSync(path, "utf8");
+  //   }
+  //   await sendNotify("京东签到-" + new Date().toLocaleDateString(), content);
+  //   console.log('发送结果完毕')
+  // }
 }
 
 start()

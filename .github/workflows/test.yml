@@ -1,9 +1,11 @@
 name: Github JD-sign bot
 
 on:
+  watch:
+    types: started
     push:
         branches:
-            - master
+            - main
     schedule:
         - cron: '5 16 * * *'
 jobs:
@@ -21,5 +23,5 @@ jobs:
               run: npm install
             - run: node app.js
               env:
-                JD_COOKIE: ${{ secrets.JD_COOKIE }}
-                PUSH_KEY: ${{ secrets.PUSH_KEY }}
+                WPLM_COOKIE: ${{ secrets.WPLM_COOKIE }}
+                PUSH_PLUS_TOKEN: ${{ secrets.PUSH_PLUS_TOKEN }}
