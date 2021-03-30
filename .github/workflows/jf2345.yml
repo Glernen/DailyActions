@@ -9,23 +9,24 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     if: github.event.repository.owner.id == github.event.sender.id
-    env:
-        WPLM_COOKIE: ${{ secrets.WPLM_COOKIE }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - name: npm install
+
+      - name: npm install and 运行 2345王牌联盟
+        env:
+          WPLM_COOKIE: ${{ secrets.WPLM_COOKIE }}
+          PUSH_PLUS_TOKEN: ${{ secrets.PUSH_PLUS_TOKEN }}
         run: |
           npm install
-      - name: 运行 2345王牌联盟
-        if: env.WPLM_COOKIE
-        run: |
           node Task/jf2345.js
-        env:
-          PUSH_PLUS_TOKEN: ${{ secrets.PUSH_PLUS_TOKEN || github.event.client_payload.PUSH_PLUS_TOKEN }}
+
  
