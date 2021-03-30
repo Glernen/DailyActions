@@ -9,7 +9,7 @@ const download = require('download')
 
 // 公共变量
 const cookie = process.env.WPLM_COOKIE
-const PUSH_PLUS_TOKEN = process.env.PUSH_PLUS_TOKEN
+const pushplus = process.env.PUSH_PLUS_TOKEN
 
 async function downFile () {
     // const url = 'https://cdn.jsdelivr.net/gh/NobyDa/Script@master/JD-DailyBonus/JD_DailyBonus.js'
@@ -29,17 +29,17 @@ async function changeFiele () {
 async function sendNotify (text,desp) {
   console.log(text)
   console.log(desp)
-  const options ={
-    uri:  `https://sc.ftqq.com/${serverJ}.send`,
-    form: { text, desp },
-    json: true,
-    method: 'POST'
-  }
-  await rp.post(options).then(res=>{
-    console.log(res)
-  }).catch((err)=>{
-    console.log(err)
-  })
+  // const options ={
+  //   uri:  `https://sc.ftqq.com/${serverJ}.send`,
+  //   form: { text, desp },
+  //   json: true,
+  //   method: 'POST'
+  // }
+  // await rp.post(options).then(res=>{
+  //   console.log(res)
+  // }).catch((err)=>{
+  //   console.log(err)
+  // })
 }
 
 async function start() {
@@ -57,15 +57,15 @@ async function start() {
   await exec("node jf2345.js >> result.txt");
   console.log('执行完毕')
 
-  // if (serverJ) {
-  //   const path = "./result.txt";
-  //   let content = "";
-  //   if (fs.existsSync(path)) {
-  //     content = fs.readFileSync(path, "utf8");
-  //   }
-  //   await sendNotify("京东签到-" + new Date().toLocaleDateString(), content);
-  //   console.log('发送结果完毕')
-  // }
+  if (pushplus) {
+    const path = "./result.txt";
+    let content = "";
+    if (fs.existsSync(path)) {
+      content = fs.readFileSync(path, "utf8");
+    }
+    await sendNotify("2345签到" + new Date().toLocaleDateString(), content);
+    console.log('发送结果完毕')
+  }
 }
 
 start()
