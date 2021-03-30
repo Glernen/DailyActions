@@ -23,7 +23,9 @@ let cookiesArr = [], cookie = '', message;//用户cookie值
 var nowhours = $.time('HH')
 var todayDate = $.time('yyyy-MM-dd')
 const notify = $.isNode() ? require('./sendNotify') : '';
-
+const exec = $.isNode() ? require('child_process').execSync : '';
+const fs = $.isNode() ? require('fs') : '';
+const download = $.isNode() ? require('download') : '';
 
 // 定义cookie环境变量：WPLM_COOKIE
 if (!$.isNode() && cookie.indexOf('@') == -1){
