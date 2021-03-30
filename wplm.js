@@ -63,11 +63,12 @@ async function start() {
     if (fs.existsSync(path)) {
         content = fs.readFileSync(path, "utf8");
     }
+    console.log(content)
    // var Time = new Date(new Date().getTime() + 8 * 60 * 60 * 1000);
     if(SEND_KEY) {
         // await notify.sendNotify("2345王牌联盟-" + new Date().toLocaleDateString(), content);
         await notify.sendNotify("2345王牌联盟", content);
-        console.log("2345王牌联盟-" + content)
+        console.log("2345王牌联盟" + content)
     }
 
     //运行完成后，删除下载的文件
