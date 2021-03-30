@@ -3,7 +3,7 @@
 	"version":"1.0.0",
 	"author":"h455257166",
 	"description":"2345王牌联盟",
-	"main":	"Task/jf2345.js",
+	"main":	"jf2345.js",
 	"license":	"ISC",
 	"repository":	{
 		"type":	"git",
