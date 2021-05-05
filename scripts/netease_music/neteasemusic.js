@@ -1,7 +1,21 @@
 const $ = new Env('网易云音乐')
+const notify = $.isNode() ? require('../sendNotify') : '';
+const CookieNode = $.isNode() ? require('./Cookie.js') : '';
+
+
 $.VAL_session = $.getdata('chavy_cookie_neteasemusic')
 $.CFG_retryCnt = ($.getdata('CFG_neteasemusic_retryCnt') || '10') * 1
 $.CFG_retryInterval = ($.getdata('CFG_neteasemusic_retryInterval') || '500') * 1
+
+if ($.isNode()) {
+  Object.keys(CookieNode).forEach((item) => {
+    cookiesArr.push(CookieNode[item])
+  })
+  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+} 
+else {
+  cookiesArr = [$.getdata('CookieNum'), $.getdata('CookieNum2'), ...jsonParse($.getdata('CookieNum') || "[]").map(item => item.cookie)].filter(item => !!item);
+}
 
 !(async () => {
   $.log('', `🔔 ${$.name}, 开始!`, '')
@@ -18,10 +32,6 @@ $.CFG_retryInterval = ($.getdata('CFG_neteasemusic_retryInterval') || '500') * 1
     $.msg($.name, $.subt, $.desc), $.log('', `🔔 ${$.name}, 结束!`, ''), $.done()
   })
 
-function init() {
-  $.isNewCookie = /https:\/\/music.163.com\/weapi\/user\/level/.test($.VAL_session)
-  $.Cookie = $.isNewCookie ? JSON.parse($.VAL_session).headers.Cookie : $.VAL_session
-}
 
 async function signweb() {
   for (let signIdx = 0; signIdx < $.CFG_retryCnt; signIdx++) {
