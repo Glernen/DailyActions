@@ -1,0 +1,56 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: 砍价免费拿_json
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */8 * * *'
+  watch:
+    types: started
+  repository_dispatch:
+    types: jd_updateBarGain
+jobs:
+  build:
+    env:
+      dst_key: ${{ secrets.GITEE_PRIVATE_KEY }} # 我自己同步到gitee使用，其他人可忽略
+    runs-on: ubuntu-latest
+    if: ${{ github.event.repository.owner.id == github.event.sender.id }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 10.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      - name: npm install
+        run: |
+          npm install
+      - name: '运行 【jd_updateBarGain】'
+        run: |
+          node scripts/jd/jd_updateBarGain.js
+        env:
+          JD_COOKIE: ${{ secrets.JD_COOKIE }}
+      - name: commit
+        run: |
+          git config --global user.email ${{ secrets.EMAIL }}
+          git config --global user.name ${{ secrets.USER_NAME }}
+          git add .
+          git commit -m "update by Github Action" -a || echo "Nothing to update"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          branch: main
+
+      # 单一仓库内容内容同步到自己的gitee上
+      - name: 开始同步【DailyActions】仓库🔄
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: github/h455257166
+          dst: gitee/h455257166
+          static_list: "DailyActions"
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+          dst_token: ${{ secrets.GITEE_TOKEN }}
+          debug: true
