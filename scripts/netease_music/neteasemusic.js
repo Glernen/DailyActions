@@ -2,6 +2,7 @@ const $ = new Env('网易云音乐')
 const notify = $.isNode() ? require('../sendNotify') : '';
 const CookieNode = $.isNode() ? require('./Cookie.js') : '';
 
+let cookiesArr = [], cookie = '', message;
 
 $.VAL_session = $.getdata('chavy_cookie_neteasemusic')
 $.CFG_retryCnt = ($.getdata('CFG_neteasemusic_retryCnt') || '10') * 1
@@ -19,11 +20,26 @@ else {
 
 !(async () => {
   $.log('', `🔔 ${$.name}, 开始!`, '')
-  init()
-  await signweb()
-  await signapp()
-  await getInfo()
-  await showmsg()
+  if (!cookiesArr[0]) {
+    $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {"open-url": "https://bean.m.jd.com/"});
+    return;
+  }
+  for (let i = 0; i < cookiesArr.length; i++) {
+    if (cookiesArr[i]) {
+      cookie = cookiesArr[i];
+      message = '';
+
+      console.log(`\n******开始【网易云账号${$.index}】*********\n`);
+      // if (!$.isLogin) {
+      //   $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+
+      // }
+      await signweb()
+      await signapp()
+      await getInfo()
+      await showmsg()
+    }
+  }
 })()
   .catch((e) => {
     $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -37,7 +53,7 @@ async function signweb() {
   for (let signIdx = 0; signIdx < $.CFG_retryCnt; signIdx++) {
     await new Promise((resove) => {
       const url = { url: `http://music.163.com/api/point/dailyTask?type=1`, headers: {} }
-      url.headers['Cookie'] = $.Cookie
+      url.headers['Cookie'] = $.cookie
       url.headers['Host'] = 'music.163.com'
       url.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15'
       $.get(url, (error, response, data) => {
@@ -61,7 +77,7 @@ async function signapp() {
   for (let signIdx = 0; signIdx < $.CFG_retryCnt; signIdx++) {
     await new Promise((resove) => {
       const url = { url: `http://music.163.com/api/point/dailyTask?type=0`, headers: {} }
-      url.headers['Cookie'] = $.Cookie
+      url.headers['Cookie'] = $.cookie
       url.headers['Host'] = 'music.163.com'
       url.headers['User-Agent'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1'
       $.get(url, (error, response, data) => {
